@@ -12,10 +12,11 @@ public class SettingsManager : MonoBehaviour
     public Dropdown dropdown;
     [SerializeField] private bool fullscreen;
     public static int pastScene;
+    public static bool isInSettings;
 
     void Start()
     {
-        
+        isInSettings = true;
     }
 
     // Update is called once per frame
@@ -75,8 +76,8 @@ public class SettingsManager : MonoBehaviour
 
     public void ExitSettingsButton()
     {
-        //PauseMenu.gamePaused = true;
-        if(pastScene==1)
+        isInSettings = false;
+        if (pastScene==1)
         {
             PauseMenu.stillPaused = true;
         }

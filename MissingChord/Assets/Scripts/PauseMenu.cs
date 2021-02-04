@@ -32,16 +32,19 @@ public class PauseMenu : MonoBehaviour
             PauseGame();
         }
 
-        if(Input.GetKeyDown(KeyCode.Escape))
+        if (SettingsManager.isInSettings == false)
         {
-            Debug.Log("escape");
-            if(gamePaused)
+            if (Input.GetKeyDown(KeyCode.Escape))
             {
-                ResumeGame();
-            }
-            else
-            {
-                PauseGame();
+                Debug.Log("escape");
+                if (gamePaused)
+                {
+                    ResumeGame();
+                }
+                else
+                {
+                    PauseGame();
+                }
             }
         }
     }
@@ -64,6 +67,7 @@ public class PauseMenu : MonoBehaviour
     }
     public void EnterSettingsButton()
     {
+        stillPaused = false;
         pauseMenu.SetActive(false);
         SettingsManager.pastScene = 1;
         SceneManager.LoadScene(2);
