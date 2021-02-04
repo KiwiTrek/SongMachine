@@ -75,6 +75,11 @@ public class SettingsManager : MonoBehaviour
 
     public void ExitSettingsButton()
     {
+        //PauseMenu.gamePaused = true;
+        if(pastScene==1)
+        {
+            PauseMenu.stillPaused = true;
+        }
         SceneManager.LoadScene(pastScene);
     }
 }
