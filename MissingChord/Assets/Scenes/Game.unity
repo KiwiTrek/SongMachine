@@ -205,7 +205,7 @@ MonoBehaviour:
   layers:
     serializedVersion: 2
     m_Bits: 0
-  speed: 50
+  speed: 25
   jumpHeight: 1000
 --- !u!212 &726393243
 SpriteRenderer:
