@@ -10,6 +10,7 @@ public class PlayerController : MonoBehaviour
     [SerializeField] private float speed;
     [SerializeField] private float jumpHeight;
     bool jump = false;
+    bool jumpAvailable = true;
     Vector2 movement;
     // Start is called before the first frame update
     void Start()
@@ -23,7 +24,7 @@ public class PlayerController : MonoBehaviour
         movement = new Vector2(0.0f, 0.0f);
         movement.x = Input.GetAxisRaw("Horizontal");
 
-        if (Input.GetButtonDown("Jump"))
+        if (Input.GetButtonDown("Jump") && jumpAvailable)
         {
             jump = true;
         }
@@ -33,21 +34,33 @@ public class PlayerController : MonoBehaviour
     {
         transform.position += new Vector3(movement.x * Time.fixedDeltaTime * speed, 0.0f, 0.0f);
 
-        //if (Physics2D.OverlapCircle(groundSensor.position, 0.1f, layers).Distance == )
+        //bool wasGrounded = isGrounded;
+        //jump = false;
 
-            Collider2D[] colliders = Physics2D.OverlapCircleAll(groundSensor.position, 0.1f, playerMask);
+        Collider2D[] colliders = Physics2D.OverlapCircleAll(groundSensor.position, 0.1f, playerMask);
         for (int i = 0; i < colliders.Length; i++)
         {
-            if (colliders[i].gameObject == gameObject)
+            if (colliders[i].gameObject != gameObject)
             {
-                return;
+                jumpAvailable = true;
+                Debug.Log("Collision!");
+                //if (wasGrounded)
+                //{
+                //    rb.AddForce(new Vector2(0.0f, jumpHeight));
+                //    //jump = false;
+                //}
             }
+            else
+            {
+                jumpAvailable = false;
+            }
+        }
 
-            if (jump)
-            {
-                rb.AddForce(new Vector2(0.0f, jumpHeight));
-                jump = false;
-            }
+        if(jump)
+        {
+            jumpAvailable = false;
+            jump = false;
+            rb.AddForce(new Vector2(0.0f, jumpHeight));
         }
     }
 }
