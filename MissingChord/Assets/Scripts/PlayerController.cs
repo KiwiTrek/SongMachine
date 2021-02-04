@@ -53,7 +53,7 @@ public class PlayerController : MonoBehaviour
         {
             transform.position += new Vector3(movement.x * Time.fixedDeltaTime * speed, 0.0f, 0.0f);
 
-            Collider2D[] colliders = Physics2D.OverlapCircleAll(groundSensor.position, 0.1f, playerMask);
+            Collider2D[] colliders = Physics2D.OverlapCircleAll(groundSensor.position, 0.01f, playerMask);
             for (int i = 0; i < colliders.Length; i++)
             {
                 if (colliders[i].gameObject != gameObject)
