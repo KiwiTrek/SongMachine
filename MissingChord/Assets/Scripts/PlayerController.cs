@@ -92,12 +92,14 @@ public class PlayerController : MonoBehaviour
             movement.y = Input.GetAxisRaw("Vertical");
             if(movement.y != 0.0f)
             {
+                rb.velocity = new Vector2(movement.x, 0.0f);
                 isClimbing = true;
                 rb.gravityScale = 0.0f;
             }
         }
         else
         {
+            isClimbing = false;
             rb.gravityScale = 5.0f;
         }
 
