@@ -24,6 +24,10 @@ public class PlayerController : MonoBehaviour
     bool isScanning = false;
     bool isInDialogue = false;
     int dialogueId;
+    [SerializeField] private GameObject octavia;
+    [SerializeField] private GameObject anne;
+    [SerializeField] private GameObject svetlana;
+    [SerializeField] private GameObject alex;
     //Vector2 spawnPos;
     Interactables lastIdScanned;
     Sensors lastSensorPassed = Sensors.START;
@@ -228,42 +232,52 @@ public class PlayerController : MonoBehaviour
                 switch (lastIdScanned)
                 {
                     case Interactables.DWAYNE1:
+                        svetlana.SetActive(true);
                         CreateDialogue("Don’t blink now, Octavia, there is what we are here for... Hold on... I’m getting Anne on the line");
                         dialogueId = 21;
                         break;
                     case Interactables.PLANT1:
+                        octavia.SetActive(true);
                         CreateDialogue("I just scanned... A green hand-coral-thing?");
                         dialogueId = 31;
                         break;
                     case Interactables.PLANT2:
+                        octavia.SetActive(true);
                         CreateDialogue("Found another one, I'm scanning.");
                         dialogueId = 121;
                         break;
                     case Interactables.PLANT3:
+                        anne.SetActive(true);
                         CreateDialogue("This one feeds from the soil on the ceiling, how curious!");
                         dialogueId = 191;
                         break;
                     case Interactables.PLANT4:
+                        octavia.SetActive(true);
                         CreateDialogue("This one is... Beautiful.");
                         dialogueId = 91;
                         break;
                     case Interactables.PLANT5:
+                        octavia.SetActive(true);
                         CreateDialogue("Why does this one look somewhat like our moon?");
                         dialogueId = 81;
                         break;
                     case Interactables.DWAYNE2:
+                        octavia.SetActive(true);
                         CreateDialogue("What on earth is that?");
                         dialogueId = 161;
                         break;
                     case Interactables.DWAYNE3:
+                        octavia.SetActive(true);
                         CreateDialogue("Great, now they float, just great, sending scan.");
                         dialogueId = 151;
                         break;
                     case Interactables.DWAYNE4:
+                        octavia.SetActive(true);
                         CreateDialogue("Found a rainbow quartz or something like that.");
                         dialogueId = 61;
                         break;
                     case Interactables.DWAYNE5:
+                        octavia.SetActive(true);
                         CreateDialogue("Well this one looks promising.");
                         dialogueId = 141;
                         break;
@@ -274,42 +288,52 @@ public class PlayerController : MonoBehaviour
                 switch(lastSensorPassed)
                 {
                     case Sensors.START:
+                        svetlana.SetActive(true);
                         CreateDialogue("Do you hear me Ms.Koch ?");
                         dialogueId = 1;
                         break;
                     case Sensors.WATER:
+                        svetlana.SetActive(true);
                         CreateDialogue("Hold on Octavia, I don't like the look of that liquid, calling Alex to get a result of the ship scan right now.");
                         dialogueId = 11;
                         break;
                     case Sensors.PATHS:
+                        octavia.SetActive(true);
                         CreateDialogue("I see different paths here, what should I do?");
                         dialogueId = 41;
                         break;
                     case Sensors.VINES:
+                        octavia.SetActive(true);
                         CreateDialogue("I think I can climb that.");
                         dialogueId = 51;
                         break;
                     case Sensors.SPIKES:
+                        alex.SetActive(true);
                         CreateDialogue("Scans indicate high density of toxic vegetation, your suit will not protect you from those, watch out.");
                         dialogueId = 101;
                         break;
                     case Sensors.MISSION_DONE:
+                        svetlana.SetActive(true);
                         CreateDialogue("Good job cadet, you can come to the extraction point now, or if you feel like it, you can keep looking for samples.");
                         dialogueId = 131;
                         break;
                     case Sensors.MISSION_UPDATE:
+                        octavia.SetActive(true);
                         CreateDialogue("Uhm, either you got the coordinates wrong or I'm lost as hell, where are you?");
                         dialogueId = 171;
                         break;
                     case Sensors.MISSION_END:
+                        octavia.SetActive(true);
                         CreateDialogue("Ok, I'm finally here.");
                         dialogueId = 181;
                         break;
                     case Sensors.DROPDOWN:
+                        octavia.SetActive(true);
                         CreateDialogue("Uhm, I would like to keep my legs attached to my knees, Cap?");
                         dialogueId = 71;
                         break;
                     case Sensors.LAKE:
+                        svetlana.SetActive(true);
                         CreateDialogue("Be careful down there rookie, we don’t want casualties.");
                         dialogueId = 111;
                         break;
@@ -326,226 +350,282 @@ public class PlayerController : MonoBehaviour
                 DestroyDialogue();
                 break;
             case 1:
+                octavia.SetActive(true);
                 CreateDialogue("Loud and clear.");
                 dialogueId = 2;
                 break;
             case 2:
+                svetlana.SetActive(true);
                 CreateDialogue("I am your mission commander Svetlana Tereshkova. Remember: use A and D to move around and SPACEBAR to Jump.");
                 dialogueId = 0;
                 break;
             case 11:
+                alex.SetActive(true);
                 CreateDialogue("Hi I'm Alex Nyberg, I'm responsible for your mission IT, you see that.. uhm.. water? Whatever it is, don’t. Touch it. It's sending huge radiation readings.");
                 dialogueId = 12;
                 break;
             case 12:
+                octavia.SetActive(true);
                 CreateDialogue("Just another day on the job huh?");
                 dialogueId = 0;
                 break;
             case 21:
+                anne.SetActive(true);
                 CreateDialogue("Hi!, I'm Anne Meir, do you see that mineral over there? Use E to use your scanner and send a clear reading to the ship for analisis.");
                 dialogueId = 22;
                 break;
             case 22:
+                octavia.SetActive(true);
                 CreateDialogue("Why don’t I just take it?");
                 dialogueId = 23;
                 break;
             case 23:
+                anne.SetActive(true);
                 CreateDialogue("We can’t trust the minerals on every planet, remember what we told you that happened to the scout on Ceturion V?");
                 dialogueId = 24;
                 break;
             case 24:
+                octavia.SetActive(true);
                 CreateDialogue("…, Scanning now.");
                 dialogueId = 25;
                 break;
             case 25:
+                alex.SetActive(true);
                 CreateDialogue("This one looks similar to iron, it could have some uses.");
                 dialogueId = 26;
                 break;
             case 26:
+                svetlana.SetActive(true);
                 CreateDialogue("You will need to scan at least 5 samples of this planet’s flora and minerals to consider this mission a success.");
                 dialogueId = 0;
                 break;
             case 31:
+                anne.SetActive(true);
                 CreateDialogue("It's actually a plant, but I like your observation, let’s call it Verdanthan!");
                 dialogueId = 32;
                 break;
             case 32:
+                octavia.SetActive(true);
                 CreateDialogue("Good with names I see?");
                 dialogueId = 33;
                 break;
             case 33:
+                anne.SetActive(true);
                 CreateDialogue("Hey! At least I try, Alex names them with numbers and codes.");
                 dialogueId = 34;
                 break;
             case 34:
+                alex.SetActive(true);
                 CreateDialogue("What was wrong with green-B205?");
                 dialogueId = 0;
                 break;
             case 41:
+                svetlana.SetActive(true);
                 CreateDialogue("Do as you like, as long as you can find samples.");
                 dialogueId = 42;
                 break;
             case 42:
+                octavia.SetActive(true);
                 CreateDialogue("Alright.");
                 dialogueId = 43;
                 break;
             case 43:
+                svetlana.SetActive(true);
                 CreateDialogue("Just remember, your extraction point is straight through the middle path.");
                 dialogueId = 0;
                 break;
             case 51:
+                alex.SetActive(true);
                 CreateDialogue("They seem resistant enough but I don’t think you should do tha-");
                 dialogueId = 52;
                 break;
             case 52:
+                anne.SetActive(true);
                 CreateDialogue("Yay! Go swing around samples to bring me more samples!");
                 dialogueId = 0;
                 break;
             case 61:
+                anne.SetActive(true);
                 CreateDialogue("It's so pure!! Nice find.");
                 dialogueId = 62;
                 break;
             case 62:
+                svetlana.SetActive(true);
                 CreateDialogue("If you drop down through that hole you will get back to the path below you. If you want to keep exploring that zone with all those vines, don’t go.");
                 dialogueId = 0;
                 break;
             case 71:
+                svetlana.SetActive(true);
                 CreateDialogue("Don’t worry about breaking your knees in the fall, cadet, remember that your suit is equipped to sustain falls from up to 100 meters without damaging its user.");
                 dialogueId = 0;
                 break;
             case 81:
+                anne.SetActive(true);
                 CreateDialogue("I don't know, what I know is that it will kill you the same as most of this planet’s flora if you touch it, so-");
                 dialogueId = 82;
                 break;
             case 82:
+                octavia.SetActive(true);
                 CreateDialogue("Yeah yeah, but what is it supposed to kill?");
                 dialogueId = 83;
                 break;
             case 83:
+                svetlana.SetActive(true);
                 CreateDialogue("Imprudent cadets probably.");
                 dialogueId = 84;
                 break;
             case 84:
+                octavia.SetActive(true);
                 CreateDialogue("…");
                 dialogueId = 0;
                 break;
             case 91:
+                anne.SetActive(true);
                 CreateDialogue("It keeps bothering me, this is the first planet that we find life. But, there are no animals?");
                 dialogueId = 92;
                 break;
             case 92:
+                octavia.SetActive(true);
                 CreateDialogue("Maybe it is in the early stages of evolution? Or maybe it is so small that we can’t see it.");
                 dialogueId = 93;
                 break;
             case 93:
+                alex.SetActive(true);
                 CreateDialogue("Doesn’t seem like it, the scans indicate that these plans are at least 50+ years old.");
                 dialogueId = 0;
                 break;
             case 101:
+                octavia.SetActive(true);
                 CreateDialogue("Copy that, you heard that, Anne? You won't have a sample of that.");
                 dialogueId = 102;
                 break;
             case 102:
+                anne.SetActive(true);
                 CreateDialogue("You can certainly try...");
                 dialogueId = 103;
                 break;
             case 103:
+                svetlana.SetActive(true);
                 CreateDialogue("Stop messing with the rookie, c’mon Octavia, keep going.");
                 dialogueId = 0;
                 break;
             case 111:
+                octavia.SetActive(true);
                 CreateDialogue("Oh, funny you mention it, I was thinking of taking a bath on that lake.");
                 dialogueId = 112;
                 break;
             case 112:
+                svetlana.SetActive(true);
                 CreateDialogue("Ha. Ha.");
                 dialogueId = 0;
                 break;
             case 121:
+                anne.SetActive(true);
                 CreateDialogue("The lectures indicate high levels of biological toxins, I would suggest not to touch it.");
                 dialogueId = 0;
                 break;
             case 131:
+                octavia.SetActive(true);
                 CreateDialogue("Sure thing boss.");
                 dialogueId = 0;
                 break;
             case 141:
+                alex.SetActive(true);
                 CreateDialogue("Promisingly lethal you mean, get away as soon as you can, radiation rises to dangerous levels just by being near that thing.");
                 dialogueId = 142;
                 break;
             case 142:
+                octavia.SetActive(true);
                 CreateDialogue("Wait what?");
                 dialogueId = 0;
                 break;
             case 151:
+                alex.SetActive(true);
                 CreateDialogue("The magnetic field of the planet seems to react with more strength with this mineral.");
                 dialogueId = 152;
                 break;
             case 152:
+                octavia.SetActive(true);
                 CreateDialogue("And here I was thinking it was magic.");
                 dialogueId = 0;
                 break;
             case 161:
+                alex.SetActive(true);
                 CreateDialogue("It looks very similar to certain material from a game I know...");
                 dialogueId = 162;
                 break;
             case 162:
+                svetlana.SetActive(true);
                 CreateDialogue("Just... just scan it and keep going.");
                 dialogueId = 0;
                 break;
             case 171:
+                svetlana.SetActive(true);
                 CreateDialogue("The previously designed zone is no longer viable for extraction.");
                 dialogueId = 172;
                 break;
             case 172:
+                alex.SetActive(true);
                 CreateDialogue("I'm sending you the new coords, do you see that mountain over there? I am afraid you will have to reach the top.");
                 dialogueId = 173;
                 break;
             case 173:
+                octavia.SetActive(true);
                 CreateDialogue("You can't land in this open area, but you can on the top of a mountain?");
                 dialogueId = 174;
                 break;
             case 174:
+                svetlana.SetActive(true);
                 CreateDialogue("If you want us to crash due to high winds we can go to the previous point.");
                 dialogueId = 175;
                 break;
             case 175:
+                octavia.SetActive(true);
                 CreateDialogue("Whatever, I needed some fun.");
                 dialogueId = 0;
                 break;
             case 181:
+                svetlana.SetActive(true);
                 CreateDialogue("Took you long enough, c’mon, get in here cadet.");
                 dialogueId = 182;
                 break;
             case 182:
+                alex.SetActive(true);
                 CreateDialogue("Mission accomplished, continuing to further analyze recovered samples, not bad Ms.Koch.");
                 dialogueId = 183;
                 break;
             case 183:
+                octavia.SetActive(true);
                 CreateDialogue("How is that for a rookie?");
                 dialogueId = 184;
                 break;
             case 184:
+                anne.SetActive(true);
                 CreateDialogue("You did great!!");
                 dialogueId = 185;
                 break;
             case 185:
+                svetlana.SetActive(true);
                 CreateDialogue("Job well done, next time try risking your neck less though.");
                 dialogueId = 186;
                 break;
             case 186:
+                alex.SetActive(true);
                 CreateDialogue("Isn’t that like part of her job?");
                 dialogueId = 0;
                 break;
             case 191:
-                CreateDialogue("Important question, it won’t hurt me to go under it.");
+                octavia.SetActive(true);
+                CreateDialogue("Important question, it won’t hurt me to go under it, right?");
                 dialogueId = 192;
                 break;
             case 192:
+                anne.SetActive(true);
                 CreateDialogue("Seems to be mostly harmless, I believe it won’t hurt you.");
                 dialogueId = 193;
                 break;
             case 193:
+                octavia.SetActive(true);
                 CreateDialogue("Roger that.");
                 dialogueId = 0;
                 break;
