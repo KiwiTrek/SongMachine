@@ -187,7 +187,6 @@ public class PlayerController : MonoBehaviour
         switch(lastIdScanned)
         {
             case Interactables.DWAYNE1:
-                TriggerText(0);
                 break;
         }
     }
@@ -244,28 +243,16 @@ public class PlayerController : MonoBehaviour
         transform.position = new Vector3(spawnPos.x, spawnPos.y, 0.0f);
     }
 
-    public void TriggerText(int id)
+    void OnTriggerEnter2D(Collider2D other)
     {
-        switch(id)
+        if (other.gameObject.layer == 11)
         {
-            case 0:
-                GameObject text = GameObject.Find("Text_0");
-                text.SetActive(true);
-                break;
-            case 1:
-                break;
-            case 2:
-                break;
-            case 3:
-                break;
-            case 4:
-                break;
-            case 5:
-                break;
-            case 6:
-                break;
-            default:
-                break;
+            Debug.Log("Dialog triggered");
+            if (other.gameObject.name=="S1")
+            {
+                Debug.Log("Sensor 1 triggered");
+            }
+            Destroy(other.gameObject);
         }
     }
 }
