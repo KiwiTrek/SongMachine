@@ -6,24 +6,43 @@ public class PlayerController : MonoBehaviour
 {
     private SpriteRenderer sr;
     private Rigidbody2D rb;
+    private Animator anim;
     [SerializeField] private Transform groundSensor = null;
-    [SerializeField] private LayerMask playerMask;
-    [SerializeField] private float speed;
-    [SerializeField] private float jumpHeight;
+    [SerializeField] private LayerMask climbMask;
     [SerializeField] private Transform interactRange = null;
     [SerializeField] private LayerMask interactMask;
-    [SerializeField] private Animator anim;
+    [SerializeField] private float speed;
+    [SerializeField] private float jumpHeight;
     bool jump = false;
     bool jumpAvailable = true;
     public bool climbAvailable = false;
     bool isClimbing = false;
     bool isScanning = false;
+    int itemsScanned;
+    //Vector2 spawnPos;
+    Interactables lastIdScanned;
     Vector2 movement;
+
+    enum Interactables
+    {
+        DWAYNE1,
+        PLANT1,
+        DWAYNE2,
+        PLANT2,
+        DWAYNE3,
+        PLANT3,
+        DWAYNE4,
+        PLANT4,
+        DWAYNE5,
+        PLANT5
+    }
     // Start is called before the first frame update
     void Start()
     {
         rb = GetComponent<Rigidbody2D>();
         sr = GetComponent<SpriteRenderer>();
+        anim = GetComponent<Animator>();
+        //spawnPos = new Vector2(465, 821);
     }
 
     // Update is called once per frame
@@ -49,7 +68,6 @@ public class PlayerController : MonoBehaviour
             {
                 isClimbing = true;
                 rb.gravityScale = 0.0f;
-                //Physics2D.gravity = new Vector2(0.0f, 0.0f);
             }
         }
         else
@@ -72,6 +90,46 @@ public class PlayerController : MonoBehaviour
                     if (colliders[i].gameObject != gameObject)
                     {
                         Debug.Log("interact");
+                        if(colliders[i].gameObject == GameObject.Find("Dwayne_1"))
+                        {
+                            SetSpawnPoint(Interactables.DWAYNE1);
+                        }
+                        else if(colliders[i].gameObject == GameObject.Find("Dwayne_2"))
+                        {
+                            SetSpawnPoint(Interactables.DWAYNE2);
+                        }
+                        else if (colliders[i].gameObject == GameObject.Find("Dwayne_3"))
+                        {
+                            SetSpawnPoint(Interactables.DWAYNE3);
+                        }
+                        else if (colliders[i].gameObject == GameObject.Find("Dwayne_4"))
+                        {
+                            SetSpawnPoint(Interactables.DWAYNE4);
+                        }
+                        else if (colliders[i].gameObject == GameObject.Find("Dwayne_5"))
+                        {
+                            SetSpawnPoint(Interactables.DWAYNE5);
+                        }
+                        else if (colliders[i].gameObject == GameObject.Find("Plant_1"))
+                        {
+                            SetSpawnPoint(Interactables.PLANT1);
+                        }
+                        else if (colliders[i].gameObject == GameObject.Find("Plant_2"))
+                        {
+                            SetSpawnPoint(Interactables.PLANT2);
+                        }
+                        else if (colliders[i].gameObject == GameObject.Find("Plant_3"))
+                        {
+                            SetSpawnPoint(Interactables.PLANT3);
+                        }
+                        else if (colliders[i].gameObject == GameObject.Find("Plant_4"))
+                        {
+                            SetSpawnPoint(Interactables.PLANT4);
+                        }
+                        else if (colliders[i].gameObject == GameObject.Find("Plant_5"))
+                        {
+                            SetSpawnPoint(Interactables.PLANT5);
+                        }
                         isScanning = true;
                     }
                     else
@@ -98,7 +156,7 @@ public class PlayerController : MonoBehaviour
         {
             transform.position += new Vector3(movement.x * Time.fixedDeltaTime * speed, 0.0f, 0.0f);
 
-            Collider2D[] colliders = Physics2D.OverlapCircleAll(groundSensor.position, 0.05f, playerMask);
+            Collider2D[] colliders = Physics2D.OverlapCircleAll(groundSensor.position, 0.05f, climbMask);
             for (int i = 0; i < colliders.Length; i++)
             {
                 if (colliders[i].gameObject != gameObject)
@@ -128,5 +186,56 @@ public class PlayerController : MonoBehaviour
     public void StartDialogue()
     {
         Debug.Log("Dialogue STARTO!");
+    }
+
+    void SetSpawnPoint(Interactables id)
+    {
+        lastIdScanned = id;
+    }
+
+    public void ResetPlayer()
+    {
+        Vector2 spawnPos = new Vector2(0,0);
+        switch (lastIdScanned)
+        {
+            case Interactables.DWAYNE1:
+                spawnPos = new Vector2(487, -816);
+                break;
+            case Interactables.PLANT1:
+                spawnPos = new Vector2(554, -807);
+                break;
+            case Interactables.DWAYNE2:
+                spawnPos = new Vector2(704, -828);
+                break;
+            case Interactables.PLANT2:
+                spawnPos = new Vector2(658, -798);
+                sr.flipX = true;
+                break;
+            case Interactables.DWAYNE3:
+                spawnPos = new Vector2(680, -755);
+                break;
+            case Interactables.PLANT3:
+                spawnPos = new Vector2(656, -786);
+                break;
+            case Interactables.DWAYNE4:
+                spawnPos = new Vector2(619, -791);
+                sr.flipX = true;
+                break;
+            case Interactables.PLANT4:
+                spawnPos = new Vector2(669, -784);
+                sr.flipX = true;
+                break;
+            case Interactables.DWAYNE5:
+                spawnPos = new Vector2(672, -815);
+                sr.flipX = true;
+                break;
+            case Interactables.PLANT5:
+                spawnPos = new Vector2(554, -748);
+                sr.flipX = true;
+                break;
+            default:
+                break;
+        }
+        transform.position = new Vector3(spawnPos.x, spawnPos.y, 0.0f);
     }
 }
