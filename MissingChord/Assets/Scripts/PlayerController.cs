@@ -6,7 +6,7 @@ public class PlayerController : MonoBehaviour
 {
     private SpriteRenderer sr;
     private Rigidbody2D rb;
-    private Animator anim;
+    [SerializeField] private Animator anim;
     [SerializeField] private Transform groundSensor = null;
     [SerializeField] private LayerMask climbMask;
     [SerializeField] private Transform interactRange = null;
@@ -41,7 +41,6 @@ public class PlayerController : MonoBehaviour
     {
         rb = GetComponent<Rigidbody2D>();
         sr = GetComponent<SpriteRenderer>();
-        anim = GetComponent<Animator>();
         //spawnPos = new Vector2(465, 821);
     }
 

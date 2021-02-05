@@ -19,7 +19,7 @@ public class WaterController : MonoBehaviour
 
     private void OnTriggerEnter2D(Collider2D collision)
     {
-        if(collision.GetComponent<GameObject>() == player.gameObject)
+        if(collision.GetComponent<GameObject>() == GameObject.Find("Player"))
         {
             player.ResetPlayer();
         }
