@@ -4,20 +4,26 @@ using UnityEngine;
 
 public class PlayerController : MonoBehaviour
 {
+    private SpriteRenderer sr;
     private Rigidbody2D rb;
     [SerializeField] private Transform groundSensor = null;
     [SerializeField] private LayerMask playerMask;
     [SerializeField] private float speed;
     [SerializeField] private float jumpHeight;
+    [SerializeField] private Transform interactRange = null;
+    [SerializeField] private LayerMask interactMask;
+    [SerializeField] private Animator anim;
     bool jump = false;
     bool jumpAvailable = true;
     public bool climbAvailable = false;
     bool isClimbing = false;
+    bool isScanning = false;
     Vector2 movement;
     // Start is called before the first frame update
     void Start()
     {
         rb = GetComponent<Rigidbody2D>();
+        sr = GetComponent<SpriteRenderer>();
     }
 
     // Update is called once per frame
@@ -25,6 +31,16 @@ public class PlayerController : MonoBehaviour
     {
         movement = new Vector2(0.0f, 0.0f);
         movement.x = Input.GetAxisRaw("Horizontal");
+
+        anim.SetFloat("Speed", Mathf.Abs(movement.x));
+        if (movement.x < 0.0f)
+        {
+            sr.flipX = true;
+        }
+        else if (movement.x > 0.0f)
+        {
+            sr.flipX = false;
+        }
 
         if(climbAvailable)
         {
@@ -45,6 +61,35 @@ public class PlayerController : MonoBehaviour
         {
             jump = true;
         }
+
+        if (Input.GetKeyDown(KeyCode.E))
+        {
+            if (!isScanning)
+            {
+                Collider2D[] colliders = Physics2D.OverlapCircleAll(interactRange.position, 2.0f, interactMask);
+                for (int i = 0; i < colliders.Length; i++)
+                {
+                    if (colliders[i].gameObject != gameObject)
+                    {
+                        Debug.Log("interact");
+                        isScanning = true;
+                    }
+                    else
+                    {
+                        Debug.Log("can't interact");
+                    }
+                }
+            }
+            else //When text box finishes
+            {
+                isScanning = false;
+                Debug.Log("Dialogue ENDOU!");
+            }
+        }
+        
+        anim.SetBool("IsJumping", !jumpAvailable);
+        anim.SetBool("ScanStart", isScanning);
+        anim.SetBool("IsClimbing", isClimbing);
     }
 
     private void FixedUpdate()
@@ -53,7 +98,7 @@ public class PlayerController : MonoBehaviour
         {
             transform.position += new Vector3(movement.x * Time.fixedDeltaTime * speed, 0.0f, 0.0f);
 
-            Collider2D[] colliders = Physics2D.OverlapCircleAll(groundSensor.position, 0.01f, playerMask);
+            Collider2D[] colliders = Physics2D.OverlapCircleAll(groundSensor.position, 0.05f, playerMask);
             for (int i = 0; i < colliders.Length; i++)
             {
                 if (colliders[i].gameObject != gameObject)
@@ -78,5 +123,10 @@ public class PlayerController : MonoBehaviour
             jump = false;
             rb.AddForce(new Vector2(0.0f, jumpHeight));
         }
+    }
+
+    public void StartDialogue()
+    {
+        Debug.Log("Dialogue STARTO!");
     }
 }

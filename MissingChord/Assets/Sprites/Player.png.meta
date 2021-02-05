@@ -74,6 +74,12 @@ TextureImporter:
   - first:
       213: 585951966842662488
     second: Player_Scan_8
+  - first:
+      213: -5324252115843577105
+    second: Player_Climb_1
+  - first:
+      213: 802321206317977270
+    second: Player_Climb_2
   externalObjects: {}
   serializedVersion: 11
   mipmaps:
@@ -489,7 +495,7 @@ TextureImporter:
       name: Player_Scan_0
       rect:
         serializedVersion: 2
-        x: 455
+        x: 449
         y: 0
         width: 25
         height: 31
@@ -510,7 +516,7 @@ TextureImporter:
       name: Player_Scan_1
       rect:
         serializedVersion: 2
-        x: 485
+        x: 479
         y: 0
         width: 25
         height: 31
@@ -531,7 +537,7 @@ TextureImporter:
       name: Player_Scan_2
       rect:
         serializedVersion: 2
-        x: 515
+        x: 509
         y: 0
         width: 25
         height: 31
@@ -552,7 +558,7 @@ TextureImporter:
       name: Player_Scan_3
       rect:
         serializedVersion: 2
-        x: 545
+        x: 539
         y: 0
         width: 25
         height: 31
@@ -573,7 +579,7 @@ TextureImporter:
       name: Player_Scan_4
       rect:
         serializedVersion: 2
-        x: 575
+        x: 569
         y: 0
         width: 25
         height: 31
@@ -594,7 +600,7 @@ TextureImporter:
       name: Player_Scan_5
       rect:
         serializedVersion: 2
-        x: 605
+        x: 603
         y: 0
         width: 25
         height: 31
@@ -615,7 +621,7 @@ TextureImporter:
       name: Player_Scan_6
       rect:
         serializedVersion: 2
-        x: 635
+        x: 634
         y: 0
         width: 25
         height: 31
@@ -670,6 +676,48 @@ TextureImporter:
       bones: []
       spriteID: 85e29179538b12800800000000000000
       internalID: 585951966842662488
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Player_Climb_1
+      rect:
+        serializedVersion: 2
+        x: 725
+        y: 0
+        width: 12
+        height: 31
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: fea8584e8e47c16b0800000000000000
+      internalID: -5324252115843577105
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Player_Climb_2
+      rect:
+        serializedVersion: 2
+        x: 755
+        y: 0
+        width: 12
+        height: 31
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 6be8852e2ea622b00800000000000000
+      internalID: 802321206317977270
       vertices: []
       indices: 
       edges: []
