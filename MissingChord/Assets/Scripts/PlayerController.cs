@@ -8,7 +8,7 @@ public class PlayerController : MonoBehaviour
     private Rigidbody2D rb;
     [SerializeField] private Animator anim;
     [SerializeField] private Transform groundSensor = null;
-    [SerializeField] private LayerMask climbMask;
+    [SerializeField] private LayerMask playerMask;
     [SerializeField] private Transform interactRange = null;
     [SerializeField] private LayerMask interactMask;
     [SerializeField] private float speed;
@@ -41,7 +41,7 @@ public class PlayerController : MonoBehaviour
     {
         rb = GetComponent<Rigidbody2D>();
         sr = GetComponent<SpriteRenderer>();
-        //spawnPos = new Vector2(465, 821);
+        //spawnPos = new Vector2(465, 821);                                     DO NOT ERASE (initial spawnpos)
     }
 
     // Update is called once per frame
@@ -155,7 +155,7 @@ public class PlayerController : MonoBehaviour
         {
             transform.position += new Vector3(movement.x * Time.fixedDeltaTime * speed, 0.0f, 0.0f);
 
-            Collider2D[] colliders = Physics2D.OverlapCircleAll(groundSensor.position, 0.05f, climbMask);
+            Collider2D[] colliders = Physics2D.OverlapCircleAll(groundSensor.position, 0.05f, playerMask);
             for (int i = 0; i < colliders.Length; i++)
             {
                 if (colliders[i].gameObject != gameObject)
@@ -194,6 +194,7 @@ public class PlayerController : MonoBehaviour
 
     public void ResetPlayer()
     {
+        sr.flipX = false;
         Vector2 spawnPos = new Vector2(0,0);
         switch (lastIdScanned)
         {

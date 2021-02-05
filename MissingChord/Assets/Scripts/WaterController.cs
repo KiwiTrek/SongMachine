@@ -4,7 +4,6 @@ using UnityEngine;
 
 public class WaterController : MonoBehaviour
 {
-    [SerializeField] private PlayerController player;
     // Start is called before the first frame update
     void Start()
     {
@@ -19,9 +18,6 @@ public class WaterController : MonoBehaviour
 
     private void OnTriggerEnter2D(Collider2D collision)
     {
-        if(collision.GetComponent<GameObject>() == GameObject.Find("Player"))
-        {
-            player.ResetPlayer();
-        }
+        GameObject.Find("Player").GetComponent<PlayerController>().ResetPlayer();
     }
 }
