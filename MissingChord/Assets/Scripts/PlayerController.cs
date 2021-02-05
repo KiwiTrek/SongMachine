@@ -18,23 +18,22 @@ public class PlayerController : MonoBehaviour
     public bool climbAvailable = false;
     bool isClimbing = false;
     bool isScanning = false;
-    int itemsScanned;
     //Vector2 spawnPos;
     Interactables lastIdScanned;
     Vector2 movement;
 
     enum Interactables
     {
-        DWAYNE1,
         PLANT1,
-        DWAYNE2,
         PLANT2,
-        DWAYNE3,
         PLANT3,
-        DWAYNE4,
         PLANT4,
-        DWAYNE5,
-        PLANT5
+        PLANT5,
+        DWAYNE1,
+        DWAYNE2,
+        DWAYNE3,
+        DWAYNE4,
+        DWAYNE5
     }
     // Start is called before the first frame update
     void Start()
@@ -185,6 +184,12 @@ public class PlayerController : MonoBehaviour
     public void StartDialogue()
     {
         Debug.Log("Dialogue STARTO!");
+        switch(lastIdScanned)
+        {
+            case Interactables.DWAYNE1:
+                TriggerText(0);
+                break;
+        }
     }
 
     void SetSpawnPoint(Interactables id)
@@ -215,15 +220,15 @@ public class PlayerController : MonoBehaviour
                 spawnPos = new Vector2(680, -755);
                 break;
             case Interactables.PLANT3:
-                spawnPos = new Vector2(656, -786);
+                spawnPos = new Vector2(669, -784);
+                sr.flipX = true;
                 break;
             case Interactables.DWAYNE4:
                 spawnPos = new Vector2(619, -791);
                 sr.flipX = true;
                 break;
             case Interactables.PLANT4:
-                spawnPos = new Vector2(669, -784);
-                sr.flipX = true;
+                spawnPos = new Vector2(727, -786);
                 break;
             case Interactables.DWAYNE5:
                 spawnPos = new Vector2(672, -815);
@@ -237,5 +242,30 @@ public class PlayerController : MonoBehaviour
                 break;
         }
         transform.position = new Vector3(spawnPos.x, spawnPos.y, 0.0f);
+    }
+
+    public void TriggerText(int id)
+    {
+        switch(id)
+        {
+            case 0:
+                GameObject text = GameObject.Find("Text_0");
+                text.SetActive(true);
+                break;
+            case 1:
+                break;
+            case 2:
+                break;
+            case 3:
+                break;
+            case 4:
+                break;
+            case 5:
+                break;
+            case 6:
+                break;
+            default:
+                break;
+        }
     }
 }
