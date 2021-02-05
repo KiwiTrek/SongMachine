@@ -1,11 +1,15 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class PlayerController : MonoBehaviour
 {
     private SpriteRenderer sr;
     private Rigidbody2D rb;
+    public GameObject backgroundText;
+    public GameObject text;
+
     [SerializeField] private Animator anim;
     [SerializeField] private Transform groundSensor = null;
     [SerializeField] private LayerMask playerMask;
@@ -18,8 +22,11 @@ public class PlayerController : MonoBehaviour
     public bool climbAvailable = false;
     bool isClimbing = false;
     bool isScanning = false;
+    bool isInDialogue = false;
+    int dialogueId;
     //Vector2 spawnPos;
     Interactables lastIdScanned;
+    Sensors lastSensorPassed = Sensors.START;
     Vector2 movement;
 
     enum Interactables
@@ -35,11 +42,28 @@ public class PlayerController : MonoBehaviour
         DWAYNE4,
         DWAYNE5
     }
+
+    enum Sensors
+    {
+        NONE = -1,
+        START,
+        WATER,
+        SPIKES,
+        VINES,
+        PATHS,
+        LAKE,
+        DROPDOWN,
+        MISSION_DONE,
+        MISSION_UPDATE,
+        MISSION_END,
+    }
     // Start is called before the first frame update
     void Start()
     {
         rb = GetComponent<Rigidbody2D>();
         sr = GetComponent<SpriteRenderer>();
+        StartDialogue();
+        //text.text = "";
         //spawnPos = new Vector2(465, 821);                                     DO NOT ERASE (initial spawnpos)
     }
 
@@ -80,6 +104,10 @@ public class PlayerController : MonoBehaviour
 
         if (Input.GetKeyDown(KeyCode.E))
         {
+            if(isInDialogue)
+            {
+                StartDialogue();
+            }
             if (!isScanning)
             {
                 Collider2D[] colliders = Physics2D.OverlapCircleAll(interactRange.position, 2.0f, interactMask);
@@ -136,10 +164,13 @@ public class PlayerController : MonoBehaviour
                     }
                 }
             }
-            else //When text box finishes
+            else//When text box finishes
             {
-                isScanning = false;
-                Debug.Log("Dialogue ENDOU!");
+                if (!isInDialogue)
+                {
+                    isScanning = false;
+                    Debug.Log("Dialogue ENDOU!");
+                }
             }
         }
         
@@ -183,12 +214,358 @@ public class PlayerController : MonoBehaviour
 
     public void StartDialogue()
     {
-        Debug.Log("Dialogue STARTO!");
-        switch(lastIdScanned)
+        if (isInDialogue)
         {
-            case Interactables.DWAYNE1:
+            ContinueDialogue(dialogueId);
+        }
+        else
+        {
+            isInDialogue = true;
+            Debug.Log("Dialogue STARTO!");
+
+            if (lastSensorPassed == Sensors.NONE)
+            {
+                switch (lastIdScanned)
+                {
+                    case Interactables.DWAYNE1:
+                        CreateDialogue("Don’t blink now, Octavia, there is what we are here for... Hold on... I’m getting Anne on the line");
+                        dialogueId = 21;
+                        break;
+                    case Interactables.PLANT1:
+                        CreateDialogue("I just scanned... A green hand-coral-thing?");
+                        dialogueId = 31;
+                        break;
+                    case Interactables.PLANT2:
+                        CreateDialogue("Found another one, I'm scanning.");
+                        dialogueId = 121;
+                        break;
+                    case Interactables.PLANT3:
+                        CreateDialogue("This one feeds from the soil on the ceiling, how curious!");
+                        dialogueId = 191;
+                        break;
+                    case Interactables.PLANT4:
+                        CreateDialogue("This one is... Beautiful.");
+                        dialogueId = 91;
+                        break;
+                    case Interactables.PLANT5:
+                        CreateDialogue("Why does this one look somewhat like our moon?");
+                        dialogueId = 81;
+                        break;
+                    case Interactables.DWAYNE2:
+                        CreateDialogue("What on earth is that?");
+                        dialogueId = 161;
+                        break;
+                    case Interactables.DWAYNE3:
+                        CreateDialogue("Great, now they float, just great, sending scan.");
+                        dialogueId = 151;
+                        break;
+                    case Interactables.DWAYNE4:
+                        CreateDialogue("Found a rainbow quartz or something like that.");
+                        dialogueId = 61;
+                        break;
+                    case Interactables.DWAYNE5:
+                        CreateDialogue("Well this one looks promising.");
+                        dialogueId = 141;
+                        break;
+                }
+            }
+            else
+            {
+                switch(lastSensorPassed)
+                {
+                    case Sensors.START:
+                        CreateDialogue("Do you hear me Ms.Koch ?");
+                        dialogueId = 1;
+                        break;
+                    case Sensors.WATER:
+                        CreateDialogue("Hold on Octavia, I don't like the look of that liquid, calling Alex to get a result of the ship scan right now.");
+                        dialogueId = 11;
+                        break;
+                    case Sensors.PATHS:
+                        CreateDialogue("I see different paths here, what should I do?");
+                        dialogueId = 41;
+                        break;
+                    case Sensors.VINES:
+                        CreateDialogue("I think I can climb that.");
+                        dialogueId = 51;
+                        break;
+                    case Sensors.SPIKES:
+                        CreateDialogue("Scans indicate high density of toxic vegetation, your suit will not protect you from those, watch out.");
+                        dialogueId = 101;
+                        break;
+                    case Sensors.MISSION_DONE:
+                        CreateDialogue("Good job cadet, you can come to the extraction point now, or if you feel like it, you can keep looking for samples.");
+                        dialogueId = 131;
+                        break;
+                    case Sensors.MISSION_UPDATE:
+                        CreateDialogue("Uhm, either you got the coordinates wrong or I'm lost as hell, where are you?");
+                        dialogueId = 171;
+                        break;
+                    case Sensors.MISSION_END:
+                        CreateDialogue("Ok, I'm finally here.");
+                        dialogueId = 181;
+                        break;
+                    case Sensors.DROPDOWN:
+                        CreateDialogue("Uhm, I would like to keep my legs attached to my knees, Cap?");
+                        dialogueId = 71;
+                        break;
+                    case Sensors.LAKE:
+                        CreateDialogue("Be careful down there rookie, we don’t want casualties.");
+                        dialogueId = 111;
+                        break;
+                }
+            }
+        }
+    }
+
+    private void ContinueDialogue(int id)
+    {
+        switch(id)
+        {
+            case 0:
+                DestroyDialogue();
+                break;
+            case 1:
+                CreateDialogue("Loud and clear.");
+                dialogueId = 2;
+                break;
+            case 2:
+                CreateDialogue("I am your mission commander Svetlana Tereshkova. Remember: use A and D to move around and SPACEBAR to Jump.");
+                dialogueId = 0;
+                break;
+            case 11:
+                CreateDialogue("Hi I'm Alex Nyberg, I'm responsible for your mission IT, you see that.. uhm.. water? Whatever it is, don’t. Touch it. It's sending huge radiation readings.");
+                dialogueId = 12;
+                break;
+            case 12:
+                CreateDialogue("Just another day on the job huh?");
+                dialogueId = 0;
+                break;
+            case 21:
+                CreateDialogue("Hi!, I'm Anne Meir, do you see that mineral over there? Use E to use your scanner and send a clear reading to the ship for analisis.");
+                dialogueId = 22;
+                break;
+            case 22:
+                CreateDialogue("Why don’t I just take it?");
+                dialogueId = 23;
+                break;
+            case 23:
+                CreateDialogue("We can’t trust the minerals on every planet, remember what we told you that happened to the scout on Ceturion V?");
+                dialogueId = 24;
+                break;
+            case 24:
+                CreateDialogue("…, Scanning now.");
+                dialogueId = 25;
+                break;
+            case 25:
+                CreateDialogue("This one looks similar to iron, it could have some uses.");
+                dialogueId = 26;
+                break;
+            case 26:
+                CreateDialogue("You will need to scan at least 5 samples of this planet’s flora and minerals to consider this mission a success.");
+                dialogueId = 0;
+                break;
+            case 31:
+                CreateDialogue("It's actually a plant, but I like your observation, let’s call it Verdanthan!");
+                dialogueId = 32;
+                break;
+            case 32:
+                CreateDialogue("Good with names I see?");
+                dialogueId = 33;
+                break;
+            case 33:
+                CreateDialogue("Hey! At least I try, Alex names them with numbers and codes.");
+                dialogueId = 34;
+                break;
+            case 34:
+                CreateDialogue("What was wrong with green-B205?");
+                dialogueId = 0;
+                break;
+            case 41:
+                CreateDialogue("Do as you like, as long as you can find samples.");
+                dialogueId = 42;
+                break;
+            case 42:
+                CreateDialogue("Alright.");
+                dialogueId = 43;
+                break;
+            case 43:
+                CreateDialogue("Just remember, your extraction point is straight through the middle path.");
+                dialogueId = 0;
+                break;
+            case 51:
+                CreateDialogue("They seem resistant enough but I don’t think you should do tha-");
+                dialogueId = 52;
+                break;
+            case 52:
+                CreateDialogue("Yay! Go swing around samples to bring me more samples!");
+                dialogueId = 0;
+                break;
+            case 61:
+                CreateDialogue("It's so pure!! Nice find.");
+                dialogueId = 62;
+                break;
+            case 62:
+                CreateDialogue("If you drop down through that hole you will get back to the path below you. If you want to keep exploring that zone with all those vines, don’t go.");
+                dialogueId = 0;
+                break;
+            case 71:
+                CreateDialogue("Don’t worry about breaking your knees in the fall, cadet, remember that your suit is equipped to sustain falls from up to 100 meters without damaging its user.");
+                dialogueId = 0;
+                break;
+            case 81:
+                CreateDialogue("I don't know, what I know is that it will kill you the same as most of this planet’s flora if you touch it, so-");
+                dialogueId = 82;
+                break;
+            case 82:
+                CreateDialogue("Yeah yeah, but what is it supposed to kill?");
+                dialogueId = 83;
+                break;
+            case 83:
+                CreateDialogue("Imprudent cadets probably.");
+                dialogueId = 84;
+                break;
+            case 84:
+                CreateDialogue("…");
+                dialogueId = 0;
+                break;
+            case 91:
+                CreateDialogue("It keeps bothering me, this is the first planet that we find life. But, there are no animals?");
+                dialogueId = 92;
+                break;
+            case 92:
+                CreateDialogue("Maybe it is in the early stages of evolution? Or maybe it is so small that we can’t see it.");
+                dialogueId = 93;
+                break;
+            case 93:
+                CreateDialogue("Doesn’t seem like it, the scans indicate that these plans are at least 50+ years old.");
+                dialogueId = 0;
+                break;
+            case 101:
+                CreateDialogue("Copy that, you heard that, Anne? You won't have a sample of that.");
+                dialogueId = 102;
+                break;
+            case 102:
+                CreateDialogue("You can certainly try...");
+                dialogueId = 103;
+                break;
+            case 103:
+                CreateDialogue("Stop messing with the rookie, c’mon Octavia, keep going.");
+                dialogueId = 0;
+                break;
+            case 111:
+                CreateDialogue("Oh, funny you mention it, I was thinking of taking a bath on that lake.");
+                dialogueId = 112;
+                break;
+            case 112:
+                CreateDialogue("Ha. Ha.");
+                dialogueId = 0;
+                break;
+            case 121:
+                CreateDialogue("The lectures indicate high levels of biological toxins, I would suggest not to touch it.");
+                dialogueId = 0;
+                break;
+            case 131:
+                CreateDialogue("Sure thing boss.");
+                dialogueId = 0;
+                break;
+            case 141:
+                CreateDialogue("Promisingly lethal you mean, get away as soon as you can, radiation rises to dangerous levels just by being near that thing.");
+                dialogueId = 142;
+                break;
+            case 142:
+                CreateDialogue("Wait what?");
+                dialogueId = 0;
+                break;
+            case 151:
+                CreateDialogue("The magnetic field of the planet seems to react with more strength with this mineral.");
+                dialogueId = 152;
+                break;
+            case 152:
+                CreateDialogue("And here I was thinking it was magic.");
+                dialogueId = 0;
+                break;
+            case 161:
+                CreateDialogue("It looks very similar to certain material from a game I know...");
+                dialogueId = 162;
+                break;
+            case 162:
+                CreateDialogue("Just... just scan it and keep going.");
+                dialogueId = 0;
+                break;
+            case 171:
+                CreateDialogue("The previously designed zone is no longer viable for extraction.");
+                dialogueId = 172;
+                break;
+            case 172:
+                CreateDialogue("I'm sending you the new coords, do you see that mountain over there? I am afraid you will have to reach the top.");
+                dialogueId = 173;
+                break;
+            case 173:
+                CreateDialogue("You can't land in this open area, but you can on the top of a mountain?");
+                dialogueId = 174;
+                break;
+            case 174:
+                CreateDialogue("If you want us to crash due to high winds we can go to the previous point.");
+                dialogueId = 175;
+                break;
+            case 175:
+                CreateDialogue("Whatever, I needed some fun.");
+                dialogueId = 0;
+                break;
+            case 181:
+                CreateDialogue("Took you long enough, c’mon, get in here cadet.");
+                dialogueId = 182;
+                break;
+            case 182:
+                CreateDialogue("Mission accomplished, continuing to further analyze recovered samples, not bad Ms.Koch.");
+                dialogueId = 183;
+                break;
+            case 183:
+                CreateDialogue("How is that for a rookie?");
+                dialogueId = 184;
+                break;
+            case 184:
+                CreateDialogue("You did great!!");
+                dialogueId = 185;
+                break;
+            case 185:
+                CreateDialogue("Job well done, next time try risking your neck less though.");
+                dialogueId = 186;
+                break;
+            case 186:
+                CreateDialogue("Isn’t that like part of her job?");
+                dialogueId = 0;
+                break;
+            case 191:
+                CreateDialogue("Important question, it won’t hurt me to go under it.");
+                dialogueId = 192;
+                break;
+            case 192:
+                CreateDialogue("Seems to be mostly harmless, I believe it won’t hurt you.");
+                dialogueId = 193;
+                break;
+            case 193:
+                CreateDialogue("Roger that.");
+                dialogueId = 0;
                 break;
         }
+    }
+
+    private void CreateDialogue(string m)
+    {
+        backgroundText.SetActive(true);
+        text.SetActive(true);
+        text.GetComponent<Text>().text = m;
+    }
+
+    private void DestroyDialogue()
+    {
+        backgroundText.SetActive(false);
+        text.GetComponent<Text>().text = "";
+        text.SetActive(false);
+        lastSensorPassed = Sensors.NONE;
+        isInDialogue = false;
     }
 
     void SetSpawnPoint(Interactables id)
@@ -202,40 +579,40 @@ public class PlayerController : MonoBehaviour
         Vector2 spawnPos = new Vector2(0,0);
         switch (lastIdScanned)
         {
-            case Interactables.DWAYNE1:
-                spawnPos = new Vector2(487, -816);
-                break;
             case Interactables.PLANT1:
                 spawnPos = new Vector2(554, -807);
                 break;
-            case Interactables.DWAYNE2:
-                spawnPos = new Vector2(704, -828);
-                break;
             case Interactables.PLANT2:
+                spawnPos = new Vector2(672, -815);
+                sr.flipX = true;
+                break;
+            case Interactables.PLANT3:
                 spawnPos = new Vector2(658, -798);
                 sr.flipX = true;
                 break;
-            case Interactables.DWAYNE3:
-                spawnPos = new Vector2(680, -755);
-                break;
-            case Interactables.PLANT3:
-                spawnPos = new Vector2(669, -784);
-                sr.flipX = true;
-                break;
-            case Interactables.DWAYNE4:
-                spawnPos = new Vector2(619, -791);
-                sr.flipX = true;
-                break;
             case Interactables.PLANT4:
-                spawnPos = new Vector2(727, -786);
-                break;
-            case Interactables.DWAYNE5:
-                spawnPos = new Vector2(672, -815);
+                spawnPos = new Vector2(669, -784);
                 sr.flipX = true;
                 break;
             case Interactables.PLANT5:
                 spawnPos = new Vector2(554, -748);
                 sr.flipX = true;
+                break;
+            case Interactables.DWAYNE1:
+                spawnPos = new Vector2(500, -817);
+                break;
+            case Interactables.DWAYNE2:
+                spawnPos = new Vector2(704, -828);
+                break;
+            case Interactables.DWAYNE3:
+                spawnPos = new Vector2(619, -791);
+                sr.flipX = true;
+                break;
+            case Interactables.DWAYNE4:
+                spawnPos = new Vector2(680, -755);
+                break;
+            case Interactables.DWAYNE5:
+                spawnPos = new Vector2(717, -786);
                 break;
             default:
                 break;
@@ -247,12 +624,46 @@ public class PlayerController : MonoBehaviour
     {
         if (other.gameObject.layer == 11)
         {
-            Debug.Log("Dialog triggered");
-            if (other.gameObject.name=="S1")
+            if (dialogueId == 0)
             {
-                Debug.Log("Sensor 1 triggered");
+                Destroy(other.gameObject);
             }
-            Destroy(other.gameObject);
+
+            switch(other.gameObject.name)
+            {
+                case "WaterSensor":
+                    lastSensorPassed = Sensors.WATER;
+                    break;
+                case "PathsSensor":
+                    lastSensorPassed = Sensors.PATHS;
+                    break;
+                case "SpikesSensor":
+                    lastSensorPassed = Sensors.SPIKES;
+                    break;
+                case "LakeSensor":
+                    lastSensorPassed = Sensors.LAKE;
+                    break;
+                case "VinesSensor":
+                    lastSensorPassed = Sensors.VINES;
+                    break;
+                case "Dropdown_1Sensor":
+                    lastSensorPassed = Sensors.DROPDOWN;
+                    break;
+                case "Dropdown_2Sensor":
+                    lastSensorPassed = Sensors.DROPDOWN;
+                    break;
+                case "MissionUpdateSensor":
+                    lastSensorPassed = Sensors.MISSION_UPDATE;
+                    break;
+                case "MissionEndSensor":
+                    lastSensorPassed = Sensors.MISSION_END;
+                    break;
+            }
+            //if (other.gameObject.name=="WaterSensor")
+            //{
+            //    lastSensorPassed = Sensors.WATER;
+            //}
+            StartDialogue();
         }
     }
 }
